@@ -1,24 +1,24 @@
-name: Matrix Build Workflow
+name: Matrix Build
 
-on: push 
+on: push
 
 jobs:
   test-matrix:
-    runs-on : ${{ matrix.os}}
+    runs-on: ${{ matrix.os }}
 
     strategy:
-        matrix:
-          os: [ubuntu-latest]
-          python-version: ["3.8", "3.11" , "3.13"]
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
-      - name: checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: setup python
-        uses: actions/setp-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version}}
+          python-version: ${{ matrix.python-version }}
 
-      - name: print python version
+      - name: Print Python Version
         run: python --version
