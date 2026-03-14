@@ -1,3 +1,4 @@
+---
 name: Hello
 on:
   push:
@@ -11,9 +12,8 @@ jobs:
         run: echo "hello Dosto"
       - name: say hello to username
         run: echo "hello $USER"
-
- details:
-  runs-on: ubuntu-latest
-  steps:
+  details:
+    runs-on: ubuntu-latest
+    steps:
     - name: show what is the version of python, docker, etc.
       run: docker --version && python --version
