@@ -19,3 +19,4 @@ jobs:
         run: |
           echo "Hello from self hosted runner" > testfile.txt
           ls
+        
