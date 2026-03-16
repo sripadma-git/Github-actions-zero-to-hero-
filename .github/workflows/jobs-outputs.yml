@@ -22,5 +22,5 @@ jobs:
       needs: [date]
       steps:
         - name: print date
-          run : echo "Today's date is ${{ needs.date.outputs.today_date }}""
+          run : echo "Today's date is" ${{ needs.date.outputs.today_date }}
  # Access the output from the 'date' job using: needs.<job_id>.outputs.<job_output_name>
