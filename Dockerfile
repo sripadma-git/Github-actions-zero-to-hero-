@@ -1,14 +1,9 @@
-# Use the official Nginx Alpine image
-FROM nginx:alpine
+FROM python:3.13-slim
 
-# Remove default Nginx website files
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
 
-# Copy your custom index.html into Nginx html folder
-COPY index.html /usr/share/nginx/html/index.html
+COPY . . 
 
-# Expose port 80
-EXPOSE 80
+RUN pip install -r requirements.txt
 
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "python", "app.py" ]
