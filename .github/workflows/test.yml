@@ -1,18 +1,21 @@
-name: Test Script
-
-on: push
+name: Run Tests
+on:
+  push:
 
 jobs:
-  run-script:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: "3.12"
+          node-version: 20        # ← change 18 to 20
 
-      - name: Run script
-        run: python app.py
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
