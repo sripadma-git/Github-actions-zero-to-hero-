@@ -1,5 +1,3 @@
-name: PR Checks
-
 on:
   pull_request:
     branches: [main]
@@ -7,41 +5,35 @@ on:
 jobs:
   file-size-check:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@v3
       - name: Check file sizes
         run: |
-          files=$(git diff --name-only origin/main...HEAD)
-          for file in $files; do
-            size=$(stat -c%s "$file")
-            if [ $size -gt 1048576 ]; then
-              echo "❌ File $file is larger than 1MB"
-              exit 1
-            fi
+          find . -size +1M | grep -v ".git" | while read f; do
+            echo "FAIL: $f is larger than 1MB"
+            exit 1
           done
 
   branch-name-check:
     runs-on: ubuntu-latest
-
     steps:
       - name: Validate branch name
         run: |
-          echo "Branch: ${{ github.head_ref }}"
-          if [[ ! "${{ github.head_ref }}" =~ ^(feature|fix|docs)/ ]]; then
-            echo "❌ Invalid branch name"
-            exit 1
+          BRANCH="${{ github.head_ref }}"
+          if [[ "$BRANCH" =~ ^(feature|fix|docs)/ ]]; then
+            echo "Branch name OK: $BRANCH"
+          else
+            echo "Bad branch name: $BRANCH"
+            exit 1   # exit 1 = FAIL the job
           fi
 
   pr-body-check:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check PR description
         run: |
-          if [ -z "${{ github.event.pull_request.body }}" ]; then
-            echo "⚠️ PR description is empty"
-          else
-            echo "PR description exists"
+          BODY="${{ github.event.pull_request.body }}"
+          if [ -z "$BODY" ]; then
+            echo "Warning: PR has no description"
+            # No exit 1 here = just a warning, doesn't fail
           fi
