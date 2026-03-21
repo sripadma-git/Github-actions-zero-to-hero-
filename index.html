@@ -1,405 +1,151 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sri Padma Chinta | DevOps & Cloud Engineer</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+<title>Docker CI/CD Pipeline Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-scroll-behavior:smooth;
+body {
+  margin:0;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:linear-gradient(135deg,#1d2b64,#f8cdda);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  color:white;
 }
 
-body{
-background:linear-gradient(135deg,#0f172a,#020617);
-color:white;
-overflow-x:hidden;
+.container {
+  background:rgba(0,0,0,0.35);
+  padding:30px;
+  border-radius:20px;
+  width:90%;
+  max-width:1000px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.4);
+  text-align:center;
 }
 
-/* Navbar */
-
-nav{
-position:fixed;
-width:100%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 10%;
-backdrop-filter:blur(10px);
-background:rgba(255,255,255,0.05);
-border-bottom:1px solid rgba(255,255,255,0.1);
-z-index:1000;
+h1 {
+  margin-bottom:25px;
+  font-size:42px;
 }
 
-nav h1{
-font-size:22px;
-letter-spacing:1px;
+.badge {
+  margin-bottom:30px;
 }
 
-nav ul{
-display:flex;
-gap:25px;
-list-style:none;
+/* Horizontal pipeline */
+.pipeline {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
 }
 
-nav ul li a{
-text-decoration:none;
-color:white;
-font-size:14px;
-transition:0.3s;
+.stage {
+  padding:20px 25px;
+  border-radius:12px;
+  font-size:18px;
+  font-weight:bold;
+  position:relative;
+  flex:1;
+  min-width:150px;
+  text-align:center;
+  color:white;
+  transition: transform 0.3s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
-nav ul li a:hover{
-color:#38bdf8;
+.stage:hover {
+  transform: translateY(-5px);
 }
 
-/* Hero */
+/* Stage colors */
+.stage.checkout { background:#3498db; }   /* Blue */
+.stage.build { background:#2ecc71; }      /* Green */
+.stage.push { background:#e67e22; }       /* Orange */
+.stage.pullrun { background:#9b59b6; }    /* Purple */
 
-.hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:0 20px;
+/* Icons */
+.stage span.icon {
+  font-size:32px;
+  margin-bottom:10px;
 }
 
-.hero h1{
-font-size:55px;
-font-weight:600;
-background:linear-gradient(90deg,#38bdf8,#818cf8);
--webkit-background-clip:text;
-color:transparent;
+/* Arrow between stages */
+.stage::after {
+  content:'→';
+  position:absolute;
+  right:-20px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:24px;
+  color:#fff;
 }
 
-.hero p{
-margin-top:15px;
-max-width:600px;
-opacity:0.8;
+.stage:last-child::after {
+  content:'';
 }
 
-.hero button{
-margin-top:30px;
-padding:12px 28px;
-border:none;
-border-radius:30px;
-background:linear-gradient(135deg,#38bdf8,#818cf8);
-color:white;
-cursor:pointer;
-transition:0.3s;
+.tech {
+  margin-top:30px;
 }
 
-.hero button:hover{
-transform:scale(1.1);
-box-shadow:0 10px 30px rgba(56,189,248,0.5);
+.tech span {
+  display:inline-block;
+  background:white;
+  color:black;
+  padding:6px 12px;
+  margin:5px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
 }
-
-/* Section */
-
-section{
-padding:100px 10%;
-}
-
-/* Glass Cards */
-
-.glass{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,0.1);
-border-radius:20px;
-padding:30px;
-transition:0.3s;
-}
-
-.glass:hover{
-transform:translateY(-8px);
-box-shadow:0 20px 40px rgba(0,0,0,0.4);
-}
-
-/* About */
-
-.about{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:40px;
-align-items:center;
-}
-
-.about h2{
-margin-bottom:15px;
-}
-
-/* Skills */
-
-.skills{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:25px;
-margin-top:40px;
-}
-
-.skill{
-text-align:center;
-}
-
-/* Projects */
-
-.projects{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:30px;
-margin-top:40px;
-}
-
-.project h3{
-margin-bottom:10px;
-}
-
-/* Contact */
-
-.contact{
-text-align:center;
-}
-
-.contact a{
-display:inline-block;
-margin:10px;
-padding:10px 20px;
-border-radius:20px;
-background:rgba(255,255,255,0.1);
-transition:0.3s;
-text-decoration:none;
-color:white;
-}
-
-.contact a:hover{
-background:#38bdf8;
-}
-
-/* Footer */
-
-footer{
-text-align:center;
-padding:30px;
-opacity:0.6;
-}
-
-/* Responsive */
-
-@media(max-width:768px){
-
-.hero h1{
-font-size:38px;
-}
-
-.about{
-grid-template-columns:1fr;
-}
-
-}
-
 </style>
 </head>
 
 <body>
 
-<nav>
+<div class="container">
 
-<h1>Padma</h1>
+<h1>🚀 Docker CI/CD using GitHub Actions</h1>
 
-<ul>
-<li><a href="#about">About</a></li>
-<li><a href="#skills">Skills</a></li>
-<li><a href="#projects">Projects</a></li>
-<li><a href="#contact">Contact</a></li>
-</ul>
-
-</nav>
-
-
-<section class="hero">
-
-<h1>Cloud & DevOps Engineer</h1>
-
-<p>
-B.Tech CSE student passionate about Cloud Infrastructure, DevOps Automation,
-and building scalable applications using AWS, Docker, Kubernetes and modern web technologies.
-</p>
-
-<button onclick="document.getElementById('projects').scrollIntoView()">View My Work</button>
-
-</section>
-
-
-<section id="about">
-
-<div class="about">
-
-<div class="glass">
-<h2>About Me</h2>
-<p>
-
-I am Sri Padma Chinta, a Computer Science Engineering student passionate about
-Cloud Computing and DevOps.
-
-I have experience deploying full-stack applications using AWS, Docker,
-MongoDB Atlas, and modern frontend technologies.
-
-My goal is to build scalable cloud systems and work as a DevOps engineer
-helping teams automate infrastructure and deployments.
-
-</p>
+<div class="badge">
+<img src="https://github.com/srdangat/github-actions-practice/actions/workflows/docker-publish.yml/badge.svg" alt="GitHub Actions Docker Publish Status">
 </div>
 
-<div class="glass">
-<h2>What I Do</h2>
-<p>
+<div class="pipeline">
+  <div class="stage checkout">
+    <span class="icon">🔄</span>
+    Code Checkout
+  </div>
+  <div class="stage build">
+    <span class="icon">🐳</span>
+    Build
+  </div>
+  <div class="stage push">
+    <span class="icon">📤</span>
+    Push
+  </div>
+  <div class="stage pullrun">
+    <span class="icon">🚀</span>
+    Pull & Run
+  </div>
+</div>
 
-• Cloud Infrastructure (AWS EC2, S3, IAM, VPC)
-
-• Containerization using Docker
-
-• Kubernetes orchestration
-
-• CI/CD pipelines
-
-• Full-stack web development
-
-• System monitoring with Prometheus & Grafana
-
-</p>
+<div class="tech">
+<span>Docker</span>
+<span>Nginx</span>
+<span>GitHub Actions</span>
+<span>Docker Hub</span>
 </div>
 
 </div>
-
-</section>
-
-
-
-<section id="skills">
-
-<h2>Skills</h2>
-
-<div class="skills">
-
-<div class="glass skill">
-<h3>AWS</h3>
-<p>EC2, S3, IAM, VPC, Route53</p>
-</div>
-
-<div class="glass skill">
-<h3>DevOps</h3>
-<p>Docker, Kubernetes, CI/CD</p>
-</div>
-
-<div class="glass skill">
-<h3>Backend</h3>
-<p>Node.js, Express.js</p>
-</div>
-
-<div class="glass skill">
-<h3>Frontend</h3>
-<p>React, HTML, CSS, JS</p>
-</div>
-
-<div class="glass skill">
-<h3>Databases</h3>
-<p>MongoDB, MySQL</p>
-</div>
-
-<div class="glass skill">
-<h3>Tools</h3>
-<p>Git, Linux, Grafana</p>
-</div>
-
-</div>
-
-</section>
-
-
-<section id="projects">
-
-<h2>Projects</h2>
-
-<div class="projects">
-
-<div class="glass project">
-
-<h3>Movie Bucket</h3>
-
-<p>
-
-A React based web application deployed on AWS using EC2 and Docker.
-Images stored on S3 and data stored in MongoDB Atlas.
-
-</p>
-
-</div>
-
-
-<div class="glass project">
-
-<h3>Pinger Statistics</h3>
-
-<p>
-
-Kubernetes based monitoring project deployed using Minikube and AWS EKS
-with Prometheus and Grafana for observability.
-
-</p>
-
-</div>
-
-
-<div class="glass project">
-
-<h3>Learning Management System</h3>
-
-<p>
-
-Full-stack LMS platform with role-based login,
-course enrollment, assignments and certificate generation.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="contact">
-
-<div class="contact">
-
-<h2>Contact</h2>
-
-<p>Let's connect and build something amazing.</p>
-
-<a href="#">GitHub</a>
-<a href="#">LinkedIn</a>
-<a href="#">Email</a>
-
-</div>
-
-</section>
-
-
-<footer>
-
-<p>© 2026 Sri Padma Chinta</p>
-
-</footer>
-
 
 </body>
 </html>
