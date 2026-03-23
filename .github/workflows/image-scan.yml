@@ -1,0 +1,21 @@
+name: Image scanner 
+
+on:
+    workflow_call:
+
+jobs:
+    image-scanner:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Login to DockerHUb
+              uses: docker/login-action@v2
+              with:
+                username: ${{ vars.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: Trivy Scanner 
+              uses: aquasecurity/trivy-actions@0.33.1
+              with:
+                severity: 'CRITICAL'
+                exit-code: '1'
+                git 
